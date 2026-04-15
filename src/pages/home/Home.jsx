@@ -3,6 +3,8 @@
 import { useRef, useState, useEffect, useCallback } from "react"
 import ShinyText from "../components/ShinyText"
 import GradientText from "../components/GradientText"
+import gsap from "gsap"
+import { Link } from "react-router"
 
 
 // had to define these guys globally for some react reasons
@@ -62,15 +64,6 @@ const videos = [
     },
 
     { 
-        thumbnail: "https://img.youtube.com/vi/3JluqTojuME/maxresdefault.jpg",
-        title: "JavaScript DOM Manipulation Basics.",
-        desc: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Voluptates neque, nobis consequatur magnam reprehenderit doloremque architecto sequi ipsa voluptas quaerat?",
-        views: 265,
-        date: "30/04/2025",
-        link: "https://www.youtube.com/watch?v=3JluqTojuME"
-    },
-
-    { 
         thumbnail: "https://img.youtube.com/vi/PkZNo7MFNFg/maxresdefault.jpg",
         title: "Learn JavaScript Full Course.",
         desc: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Voluptates neque, nobis consequatur magnam reprehenderit doloremque architecto sequi ipsa voluptas quaerat?",
@@ -81,9 +74,7 @@ const videos = [
 ]
 
 const infiniteVideos = [...videos, ...videos]
-
 function Home() {
-
     const CARD_W = 96
     const GAP = 8
     const STEP = CARD_W + GAP
@@ -93,6 +84,74 @@ function Home() {
     const currentSlide = useRef(0)
     const [activeIndex, setActiveIndex] = useState(0)
     const [currInfo, setCurrInfo] = useState(videos[0])
+
+    useEffect(() => {
+        gsap.from(
+            [".title", ".stats", ".desc", ".play-btn"],
+            {
+                y: 40,
+                opacity: 0,
+                duration: 0.8,
+                stagger: 0.1,
+                ease: "expo.out"
+            }
+        )
+
+        gsap.from(".thumbnail", {
+            scale: 1.08,
+            opacity: 0,
+            duration: 1,
+            ease: "expo.out"
+        })
+    }, [])
+
+    const animateSlideReveal = useCallback(() => {
+        const tl = gsap.timeline()
+
+        tl.fromTo(
+            ".thumbnail",
+            {
+                opacity: 0,
+                scale: 1.08
+            },
+            {
+                opacity: 1,
+                scale: 1,
+                duration: 0.8,
+                ease: "expo.out"
+            }
+        )
+        
+        tl.fromTo(
+            [".title", ".stats", ".desc"],
+            {
+                y: 40,
+                opacity: 0
+            },
+            {
+                y: 0,
+                opacity: 1,
+                duration: 0.6,
+                stagger: 0.08,
+                ease: "expo.out"
+            },
+            "reveal"
+        )
+        tl.fromTo(
+            ".play-btn",
+            {
+                y: 40,
+                opacity: 0
+            },
+            {
+                y: 0,
+                opacity: 1,
+                duration: .4,
+            },
+            "reveal"
+        )
+        
+    }, [])
 
     const goToSlide = useCallback((rawIndex, animate = true) => {
         const track = trackRef.current
@@ -108,7 +167,12 @@ function Home() {
         // after changing active slide
         setCurrInfo(videos[normalIndex])
 
-    }, [STEP])
+        // reveal animation
+        requestAnimationFrame(() => {
+            animateSlideReveal(normalIndex)
+        })
+
+    }, [STEP, animateSlideReveal])
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -140,15 +204,15 @@ function Home() {
         goToSlide(next)
     }
 
-  return (
+    return (
     <div className="main selection:bg-[#f5f5f53e] w-full h-screen relative">
         <div className="banner w-full h-full relative object-cover overflow-hidden">
-            <div className="vignette absolute w-full h-full bg-linear-to-r from-[#080808] to-transparent"></div>
             <img className='thumbnail w-full h-full' src={currInfo.thumbnail} alt="img1" />
         </div>
         <div className="content w-full h-full absolute top-0 left-0 flex items-center justify-between">
-            <div className="info w-2/5 h-full relative text-[#e2e1df] flex flex-col items-start px-16 py-5 gap-2">
-                <h3 className='font-["jose-bold"] text-6xl leading-none tracking-tighter mt-[50%]'>
+            <div className="vignette absolute w-full h-full bg-linear-to-r from-[#080808] to-transparent"></div>
+            <div className="info w-2/5 h-full relative text-[#e2e1df] flex flex-col items-start justify-center px-16 py-5 gap-2">
+                <h3 className='title font-["jose-bold"] text-6xl leading-none tracking-tighter'>
                     <ShinyText
                     text={currInfo.title}
                     speed={2}
@@ -173,7 +237,10 @@ function Home() {
                     </GradientText>
                 </div>
                 <p className="desc opacity-60">{currInfo.desc}</p>
-                <button className="play-btn mt-[10%] cursor-pointer w-full rounded-lg text-white text-xl font-bold py-2 px-6 bg-linear-to-r from-cyan-500 to-blue-500 hover:from-indigo-400 hover:to-cyan-400 hover:scale-[1.05] transition duration-500">Play</button>
+                <Link to={`${currInfo.link}`} className="play-btn flex items-center justify-center gap-2 mt-[5%] cursor-pointer w-full rounded-lg text-white text-xl font-bold py-2 px-6 bg-linear-to-r from-cyan-500 to-blue-500 hover:from-indigo-400 hover:to-cyan-400 hover:scale-[1.05] transition-transform duration-500">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="currentColor"><path d="M19.376 12.4161L8.77735 19.4818C8.54759 19.635 8.23715 19.5729 8.08397 19.3432C8.02922 19.261 8 19.1645 8 19.0658V4.93433C8 4.65818 8.22386 4.43433 8.5 4.43433C8.59871 4.43433 8.69522 4.46355 8.77735 4.5183L19.376 11.584C19.6057 11.7372 19.6678 12.0477 19.5146 12.2774C19.478 12.3323 19.4309 12.3795 19.376 12.4161Z"></path></svg>
+                    <p>Play</p>
+                </Link>
             </div>
             <div className="slider-container w-3/5 h-full relative flex justify-end items-end mb-[10%] px-5">
                 <div className="relative w-8/10 flex items-center">
