@@ -1,0 +1,31 @@
+[
+    {
+        "id": 1,
+        "thumbnail": "https://img10.hotstar.com/image/upload/f_auto,q_90,w_1920/sources/r1/cms/prod/4782/1771569944782-i",
+        "title": "Drawing the Parabolic Curve.",
+        "desc": "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Voluptates neque, nobis consequatur magnam reprehenderit doloremque architecto sequi ipsa voluptas quaerat?",
+        "views": 10,
+        "date": "20/10/2025",
+        "link": "https://www.youtube.com/watch?v=ysz5S6PUM-U"
+    },
+
+    { 
+        "id": 2,
+        "thumbnail": "https://img.youtube.com/vi/SgmNxE9lWcY/maxresdefault.jpg",
+        "title": "CSS Animation Tutorial in 20 Minutes.",
+        "desc": "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Voluptates neque, nobis consequatur magnam reprehenderit doloremque architecto sequi ipsa voluptas quaerat?",
+        "views": 152,
+        "date": "11/09/2025",
+        "link": "https://www.youtube.com/watch?v=SgmNxE9lWcY"
+    },
+
+    { 
+        "id": 3,
+        "thumbnail": "https://img.youtube.com/vi/-mJFZp84TIY/maxresdefault.jpg",
+        "title": "Complete React Tutorial for Beginners.",
+        "desc": "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Voluptates neque, nobis consequatur magnam reprehenderit doloremque architecto sequi ipsa voluptas quaerat?",
+        "views": 324,
+        "date": "05/08/2025",
+        "link": "https://www.youtube.com/watch?v=-mJFZp84TIY"
+    }
+]
