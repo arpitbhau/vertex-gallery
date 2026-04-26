@@ -1,12 +1,11 @@
 // radhe radhe
 
 import videos from "../../db/videos.json";
-import Video from "../video/Video";
 import { useRef, useState, useEffect, useCallback } from "react";
 import ShinyText from "../components/ShinyText";
 import GradientText from "../components/GradientText";
 import gsap from "gsap";
-import { Link, Route, Routes } from "react-router";
+import { Link } from "react-router";
 
 
 const infiniteVideos = [...videos, ...videos];
@@ -141,10 +140,6 @@ function Home() {
 
   return (
     <div className="main selection:bg-[#f5f5f53e] w-full h-screen relative">
-      {/* popup thingy */}
-      <Routes>
-        <Route path="/video/:id" element={<Video />} />
-      </Routes>
       <div className="banner w-full h-full relative object-cover overflow-hidden">
         <img
           className="thumbnail w-full h-full"
